@@ -1,0 +1,70 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "cniVersion": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string"
+        },
+        "ipMasq": {
+            "type": "boolean"
+        },
+        "ipam": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "subnet": {
+                        "type": "string"
+                },
+                "gateway": {
+                        "type": "string"
+                },
+                "range-start": {
+                        "type": "string"
+                },
+                "range-end": {
+                        "type": "string"
+                },
+                "routes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "network/route.json"
+                    }
+                }
+            }
+        },
+        "dns": {
+            "$ref": "network/dns.json"
+        },
+        "args": {
+            "$ref": "net_args.json"
+        },
+        "prevResult": {
+            "$ref": "result_curr.json"
+        },
+        "runtimeConfig": {
+            "type": "object",
+            "properties": {
+                "portMappings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "inner_port_mapping.json"
+                    }
+                },
+                "bandwidth": {
+                    "$ref": "bandwidth_entry.json"
+                }
+            }
+        },
+        "capabilities": {
+            "$ref": "../defs.json#/definitions/mapStringBool"
+        }
+    }
+}

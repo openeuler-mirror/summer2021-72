@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "Type": {
+        "type": "string"
+    },
+    "Source": {
+        "type": "string"
+    },
+    "Target": {
+        "type": "string"
+    },
+    "Readonly": {
+        "type": "boolean"
+    },
+    "Consistency": {
+        "type": "string"
+    },
+    "BindOptions": {
+        "$ref": "bind-options.json"
+    },
+    "VolumeOptions": {
+        "$ref": "volume/options.json"
+    },
+    "TmpfsOptions": {
+        "$ref": "tmpfs-options.json"
+    }
+  }
+}

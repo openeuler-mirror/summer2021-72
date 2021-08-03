@@ -1,0 +1,123 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Huawei docker image save and load config Specification",
+    "properties": {
+        "CommonConfig": {
+            "properties": {
+                "Path": {
+                    "type": "string"
+                },
+                "Args": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "Config": {
+                    "$ref": "config.json"
+                },
+                "Created": {
+                    "type": "string"
+                },
+                "Image": {
+                    "type": "string"
+                },
+                "ImageType": {
+                    "type": "string"
+                },
+                "HostnamePath": {
+                    "type": "string"
+                },
+                "HostsPath": {
+                    "type": "string"
+                },
+                "ResolvConfPath": {
+                    "type": "string"
+                },
+                "ShmPath": {
+                    "type": "string"
+                },
+                "LogPath": {
+                    "type": "string"
+                },
+                "BaseFs": {
+                    "type": "string"
+                },
+                "MountPoints": {
+                    "type": "object",
+                    "patternProperties": {
+                        ".{1,}": {
+                            "type": "object",
+                            "properties": {
+                                "Type": {
+                                    "type": "string"
+                                },
+                                "Destination": {
+                                    "type": "string"
+                                },
+                                "Driver": {
+                                    "type": "string"
+                                },
+                                "Key": {
+                                    "type": "string"
+                                },
+                                "Name": {
+                                    "type": "string"
+                                },
+                                "Named": {
+                                    "type": "boolean"
+                                },
+                                "Propagation": {
+                                    "type": "string"
+                                },
+                                "RW": {
+                                    "type": "boolean"
+                                },
+                                "Relabel": {
+                                    "type": "string"
+                                },
+                                "Source": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "MountLabel": {
+                    "type": "string"
+                },
+                "ProcessLabel": {
+                    "type": "string"
+                },
+                "SeccompProfile": {
+                    "type": "string"
+                },
+                "NoNewPrivileges": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "id",
+                "Name"
+            ],
+            "type": "object"
+        },
+        "Image": {
+            "type": "string"
+        },
+        "State": {
+            "$ref": "state.json"
+        }
+    },
+    "required": [
+        "State",
+        "CommonConfig"
+    ],
+    "type": "object"
+}
