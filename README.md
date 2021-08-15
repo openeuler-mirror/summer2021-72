@@ -2,7 +2,7 @@
 
 #### 介绍
 https://gitee.com/openeuler-competition/summer-2021/issues/I3EPAT
-
+具体的产出代码位于dev分支上
 #### 软件架构
 软件架构说明
 
