@@ -33,7 +33,7 @@ function check_idmap_of_file()
    return ${ret}
 }
  
-function check_idmap_in_container()
+function check_idmap_of_file_in_container()
 {
    local ret=0
  
@@ -195,7 +195,7 @@ function test_userns_remap_with_create_file_in_container()
    isula exec -it ${CID} touch ${filename}
    [[ $? != 0 ]] && msg_err "${FUNCNAME[0]}:${LINENO} - Failed to create file in container" && ((ret++))
  
-   check_idmap_in_container ${CID} ${filename} "${FUNCNAME[0]}:${LINENO} - The idmap is not correctly mapped"
+   check_idmap_of_file_in_container ${CID} ${filename} "${FUNCNAME[0]}:${LINENO} - The idmap is not correctly mapped"
    [[ $? != 0 ]] && ((ret++))
  
    check_idmap_of_file ${CONTAINER_PATH}/${CID}/diff/${filename} "${FUNCNAME[0]}:${LINENO} - The idmap is not correctly mapped"
@@ -207,7 +207,39 @@ function test_userns_remap_with_create_file_in_container()
    msg_info "${test} finished with return ${ret}..."
    return ${ret}  
 }
+
+test_cancel_userns_remap()
+{
+   local ret=0
+   local image="busybox"
+   local test="tess_cancel_userns_remap  => (${FUNCNAME[@]})"
+   local filename="test"
  
+   msg_info "${test} starting..."
+  
+   CID=$(isula run -itd --userns=host ${image})
+   isula exec -it ${CID} touch ${filename}
+   [[ $? != 0 ]] && msg_err "${FUNCNAME[0]}:${LINENO} - Failed to create file in container" && ((ret++))
+ 
+   check_idmap_of_file_in_container ${CID} ${filename} "${FUNCNAME[0]}:${LINENO} - The idmap is not correctly mapped"
+   [[ $? != 0 ]] && ((ret++))
+
+   idmap=$(stat -c"%u:%g" ${CONTAINER_PATH}/${CID}/diff/${filename})
+   [[ "${idmap}" != "${ROOT}" ]] && msg_err "${FUNCNAME[0]}:${LINENO} - The idmap is not correctly mapped" && ((ret++))
+   
+   cat "${LCR_ROOT_PATH}/${CID}/config"  | grep "lxc.idmap = u 0 100000 65535"
+   [[ $? == 0 ]] && msg_err "${FUNCNAME[0]}:${LINENO} - Uidmap should not exist in lcr config" && ((ret++)) 
+  
+   cat "${LCR_ROOT_PATH}/${CID}/config"  | grep "lxc.idmap = g 0 100000 65535"
+   [[ $? == 0 ]] && msg_err "${FUNCNAME[0]}:${LINENO} - Gidmap should not exist in lcr config" && ((ret++)) 
+   
+   isula rm -f $CID
+   [[ $? != 0 ]] && msg_err "${FUNCNAME[0]}:${LINENO} - Failed to rm container" && ((ret++))  
+ 
+   msg_info "${test} finished with return ${ret}..."
+   return ${ret}  
+}
+
 declare -i ans=0
  
 start_isulad_with_userns_remap || ((ans++))
@@ -216,6 +248,7 @@ test_userns_remap_with_pull_image || ((ans++))
 test_userns_remap_with_create_container || ((ans++))
 check_lcr_config || ((ans++))
 test_userns_remap_with_create_file_in_container || ((ans++))
+test_cancel_userns_remap || ((ans++))
  
 check_valgrind_log
 start_isulad_without_valgrind
